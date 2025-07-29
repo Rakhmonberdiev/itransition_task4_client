@@ -1,82 +1,81 @@
-<div class="min-h-screen grid grid-cols-1">
-  <div class="flex items-center justify-center bg-base-100 p-6">
-    <div class="w-full max-w-md space-y-6">
-      <h1 class="text-3xl font-bold">Welcome Back</h1>
-      <p class="text-sm">
-        Today is a new day. It’s your day. You shape it. Sign in to start
-        managing your projects.
-      </p>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">Email</label>
-          <input
-            formControlName="email"
-            type="email"
-            placeholder="example@email.com"
-            class="input w-full"
-          />
-          @if(form.controls['email'].invalid && form.controls['email'].touched)
-          {
-          <p class="text-xs text-error mt-1">
-            {{
-              form!.controls["email"]!.errors!["required"]
-                ? "Email is required."
-                : ""
-            }}
-            {{
-              form!.controls["email"]!.errors!["email"] ? "Invalid email." : ""
-            }}
-          </p>
-          }
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">Password</label>
-          <input
-            formControlName="password"
-            type="password"
-            placeholder="At least 1 characters"
-            class="input w-full"
-          />
-          @if(form.controls['password'].invalid &&
-          form.controls['password'].touched){
-          <p class="text-xs text-error mt-1">
-            {{
-              form!.controls["password"]!.errors!["required"]
-                ? "Password is required."
-                : ""
-            }}
-            {{
-              form!.controls["password"]!.errors!["minlength"]
-                ? "Min 8 characters."
-                : ""
-            }}
-          </p>
-          }
-        </div>
-
-        <div class="text-right">
-          <a routerLink="/forgot-password" class="link link-primary text-sm">
-            Forgot Password?
-          </a>
-        </div>
-
-        <button
-          type="submit"
-          class="btn btn-primary w-full"
-          [disabled]="form.invalid"
-        >
-          Sign In
-        </button>
-      </form>
-
-      <div class="text-center text-sm">
-        Don’t have an account?
-        <a routerLink="/register" class="link link-primary">Sign up</a>
+<div class="min-h-screen flex items-center justify-center bg-base-100 p-6">
+  <div class="w-full max-w-md space-y-6 fade-in">
+    <h1 class="text-3xl font-bold">Welcome Back</h1>
+    <p class="text-sm">
+      Today is a new day. It’s your day. You shape it. Sign in to start managing
+      your projects.
+    </p>
+    @if(form){
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Email</label>
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="example@email.com"
+          class="input w-full"
+        />
+        @if(form.controls['email'].invalid && form.controls['email'].touched) {
+        <p class="text-xs text-error mt-1 fade-in">
+          {{
+            form!.controls["email"]!.errors!["required"]
+              ? "Email is required."
+              : ""
+          }}
+          {{
+            form!.controls["email"]!.errors!["email"] ? "Invalid email." : ""
+          }}
+        </p>
+        }
       </div>
-      <div class="text-center text-xs text-gray-400 mt-4">
-        &copy; 2025 ALL RIGHTS RESERVED
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Password</label>
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="At least 1 characters"
+          class="input w-full"
+        />
+        @if(form.controls['password'].invalid &&
+        form.controls['password'].touched){
+        <p class="text-xs text-error mt-1 fade-in">
+          {{
+            form!.controls["password"]!.errors!["required"]
+              ? "Password is required."
+              : ""
+          }}
+          {{
+            form!.controls["password"]!.errors!["minlength"]
+              ? "Min 8 characters."
+              : ""
+          }}
+        </p>
+        }
       </div>
+
+      <div class="text-right">
+        <a routerLink="/forgot-password" class="link link-primary text-sm">
+          Forgot Password?
+        </a>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-full"
+        [disabled]="form.invalid"
+      >
+        Sign In
+      </button>
+    </form>
+    }
+
+    <div class="text-center text-sm">
+      Don’t have an account?
+      <a routerLink="/register" class="link link-primary">Sign up</a>
+    </div>
+    <div class="text-center text-xs text-gray-400 mt-4">
+      &copy; 2025 ALL RIGHTS RESERVED
     </div>
   </div>
 </div>
