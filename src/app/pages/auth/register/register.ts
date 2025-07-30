@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { RegisterRequest } from '../../../_models/auth.models';
+import { AuthService } from '../../../_services/auth.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -15,20 +18,48 @@ import { RouterLink } from '@angular/router';
 })
 export class Register implements OnInit {
   form!: FormGroup;
-
-  constructor(private fb: FormBuilder) {}
+  loading = signal(false);
+  errorMessages = signal<string[] | null>(null);
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
       fullName: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    console.log('Registering', this.form.value);
+    this.loading.set(true);
+    const payload: RegisterRequest = {
+      fullName: this.form.value.fullName,
+      email: this.form.value.email,
+      password: this.form.value.password,
+    };
+
+    this.authService
+      .register(payload)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          const allMessages: string[] = err.error?.errors
+            ? Object.values<string[]>(err.error.errors).flat()
+            : [
+                err.error?.message ||
+                  'Registration failed. Please try again later.',
+              ];
+          this.errorMessages.set(allMessages);
+        },
+      });
   }
   get fullNameControl() {
     return this.form.get('fullName')!;

@@ -4,7 +4,13 @@
     <p class="text-sm">
       Join us today—enter your details to start your journey.
     </p>
-    @if(form){
+    @if(errorMessages()){
+    <div class="alert alert-error fade-in">
+      @for (msg of errorMessages(); track $index) {
+      <p class="text-base-100">{{ msg }}</p>
+      }
+    </div>
+    } @if(form){
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
       <div>
         <label class="block text-sm font-medium mb-1">Full Name</label>
@@ -54,9 +60,9 @@
       <button
         type="submit"
         class="btn btn-primary w-full"
-        [disabled]="form.invalid"
+        [disabled]="form.invalid || loading()"
       >
-        Sign Up
+        {{ loading() ? "Signing Up…" : "Sign Up" }}
       </button>
     </form>
     }
