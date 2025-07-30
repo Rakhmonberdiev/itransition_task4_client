@@ -6,7 +6,8 @@ import {
   LoginRequest,
   RegisterRequest,
 } from '../_models/auth.models';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
+import { CurrentUserService } from './current-user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,33 +15,19 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl + 'auth/';
-  currentUser = signal<AuthResponse | null>(null);
-
-  loadUser(): Observable<AuthResponse> {
-    return this.http
-      .get<AuthResponse>(this.baseUrl + 'me', { withCredentials: true })
-      .pipe(tap((user) => this.currentUser.set(user)));
-  }
+  private store = inject(CurrentUserService);
   login(req: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(this.baseUrl + 'login', req, {
         withCredentials: true,
       })
-      .pipe(tap((user) => this.currentUser.set(user)));
+      .pipe(tap((user) => this.store.setUser(user)));
   }
   register(req: RegisterRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(this.baseUrl + 'register', req, {
         withCredentials: true,
       })
-      .pipe(tap((user) => this.currentUser.set(user)));
-  }
-  logout(): Observable<void> {
-    return this.http
-      .post<void>(this.baseUrl + 'logout', {}, { withCredentials: true })
-      .pipe(tap(() => this.currentUser.set(null)));
-  }
-  isAuthenticated(): boolean {
-    return !!this.currentUser();
+      .pipe(tap((user) => this.store.setUser(user)));
   }
 }

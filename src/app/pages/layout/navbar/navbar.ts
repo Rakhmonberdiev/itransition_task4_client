@@ -1,4 +1,13 @@
-import { Component, DOCUMENT, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  DOCUMENT,
+  inject,
+  Inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { CurrentUserService } from '../../../_services/current-user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,6 +17,9 @@ import { Component, DOCUMENT, Inject, OnInit } from '@angular/core';
 })
 export class Navbar implements OnInit {
   isDarkMode: boolean = false;
+  store = inject(CurrentUserService);
+  private router = inject(Router);
+  toastMessage = signal<string | null>(null);
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
   ngOnInit(): void {
@@ -30,5 +42,17 @@ export class Navbar implements OnInit {
       'data-theme',
       dark ? 'dark' : 'light'
     );
+  }
+
+  logout(): void {
+    this.store.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.toastMessage.set('Server unavailable. Please try again later.');
+        setTimeout(() => this.toastMessage.set(null), 3000);
+      },
+    });
   }
 }

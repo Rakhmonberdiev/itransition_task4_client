@@ -28,6 +28,7 @@ export class Login implements OnInit {
   }
   onSubmit(): void {
     if (this.form.invalid) return;
+    this.errorMessage.set(null);
     this.auth.login(this.form.value).subscribe({
       next: () => this.router.navigate(['/']),
       error: (err) => {
