@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
   AuthResponse,
   LoginRequest,
   RegisterRequest,
 } from '../_models/auth.models';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CurrentUserService } from './current-user.service';
 
 @Injectable({
