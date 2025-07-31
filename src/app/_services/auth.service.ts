@@ -3,8 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
   AuthResponse,
+  ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
+  ResetPasswordRequest,
 } from '../_models/auth.models';
 import { Observable, tap } from 'rxjs';
 import { CurrentUserService } from './current-user.service';
@@ -29,5 +31,12 @@ export class AuthService {
         withCredentials: true,
       })
       .pipe(tap((user) => this.store.setUser(user)));
+  }
+  forgotPassword(req: ForgotPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}forgot-password`, req);
+  }
+
+  resetPassword(req: ResetPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}reset-password`, req);
   }
 }

@@ -24,7 +24,20 @@ export const routes: Routes = [
       import('./pages/auth/register/register').then((m) => m.Register),
     canActivate: [guestGuard],
   },
-
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./pages/auth/forgot-password/forgot-password').then(
+        (m) => m.ForgotPassword
+      ),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./pages/auth/reset-password/reset-password').then(
+        (m) => m.ResetPassword
+      ),
+  },
   {
     path: '**',
     redirectTo: 'home',

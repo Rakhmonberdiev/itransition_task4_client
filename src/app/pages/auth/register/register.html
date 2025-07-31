@@ -1,79 +1,81 @@
 <div class="min-h-screen flex items-center justify-center bg-base-100 p-6">
-  <div class="w-full max-w-md space-y-6 fade-in">
-    <h1 class="text-3xl font-bold">Create Account</h1>
-    <p class="text-sm">
-      Join us today—enter your details to start your journey.
-    </p>
-    @if(errorMessages()){
-    <div class="alert alert-error fade-in">
-      @for (msg of errorMessages(); track $index) {
-      <p class="text-base-100">{{ msg }}</p>
+  <div class="w-full max-w-md space-y-6 p-2 fade-in">
+    <div class="max-w-md p-6 bg-base-200 rounded shadow">
+      <h1 class="text-3xl font-bold">Create Account</h1>
+      <p class="text-sm">
+        Join us today—enter your details to start your journey.
+      </p>
+      @if(errorMessages()){
+      <div class="alert alert-error fade-in">
+        @for (msg of errorMessages(); track $index) {
+        <p class="text-base-100">{{ msg }}</p>
+        }
+      </div>
+      } @if(form){
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Full Name</label>
+          <input
+            formControlName="fullName"
+            type="text"
+            placeholder="Your full name"
+            class="input w-full"
+          />
+          @if(fullNameControl.invalid && fullNameControl.touched){
+          <p class="text-xs text-error mt-1 fade-in">
+            {{ fullNameControl.errors?.['required'] ? 'Full name is required.' : '' }}
+            {{ fullNameControl.errors?.['maxlength'] ? 'Max 100 characters.' : '' }}
+          </p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Email Address</label>
+          <input
+            formControlName="email"
+            type="email"
+            placeholder="you@example.com"
+            class="input w-full"
+          />
+          @if(emailControl.invalid && emailControl.touched){
+          <p class="text-xs text-error mt-1 fade-in">
+            {{ emailControl.errors?.['required'] ? 'Please enter your email.' : '' }}
+            {{ emailControl.errors?.['email'] ? 'Please enter a valid email.' : '' }}
+          </p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Password</label>
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="At least 8 characters"
+            class="input input-bordered w-full"
+          />
+          @if(passwordControl.invalid && passwordControl.touched){
+          <p class="text-xs text-error mt-1">
+            {{ passwordControl.errors?.['required'] ? 'Please enter a password.' : '' }}
+            {{ passwordControl.errors?.['minlength'] ? 'Password must be at least 8 characters.' : '' }}
+          </p>
+          }
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary w-full"
+          [disabled]="form.invalid || loading()"
+        >
+          {{ loading() ? "Signing Up…" : "Sign Up" }}
+        </button>
+      </form>
       }
-    </div>
-    } @if(form){
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium mb-1">Full Name</label>
-        <input
-          formControlName="fullName"
-          type="text"
-          placeholder="Your full name"
-          class="input w-full"
-        />
-        @if(fullNameControl.invalid && fullNameControl.touched){
-        <p class="text-xs text-error mt-1 fade-in">
-          {{ fullNameControl.errors?.['required'] ? 'Full name is required.' : '' }}
-          {{ fullNameControl.errors?.['maxlength'] ? 'Max 100 characters.' : '' }}
-        </p>
-        }
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Email Address</label>
-        <input
-          formControlName="email"
-          type="email"
-          placeholder="you@example.com"
-          class="input w-full"
-        />
-        @if(emailControl.invalid && emailControl.touched){
-        <p class="text-xs text-error mt-1 fade-in">
-          {{ emailControl.errors?.['required'] ? 'Please enter your email.' : '' }}
-          {{ emailControl.errors?.['email'] ? 'Please enter a valid email.' : '' }}
-        </p>
-        }
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Password</label>
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="At least 8 characters"
-          class="input input-bordered w-full"
-        />
-        @if(passwordControl.invalid && passwordControl.touched){
-        <p class="text-xs text-error mt-1">
-          {{ passwordControl.errors?.['required'] ? 'Please enter a password.' : '' }}
-          {{ passwordControl.errors?.['minlength'] ? 'Password must be at least 8 characters.' : '' }}
-        </p>
-        }
-      </div>
-      <button
-        type="submit"
-        class="btn btn-primary w-full"
-        [disabled]="form.invalid || loading()"
-      >
-        {{ loading() ? "Signing Up…" : "Sign Up" }}
-      </button>
-    </form>
-    }
 
-    <div class="text-center text-sm">
-      Already have an account?
-      <a routerLink="/login" class="link link-primary">Sign in</a>
-    </div>
+      <div class="text-center text-sm">
+        Already have an account?
+        <a routerLink="/login" class="link link-primary">Sign in</a>
+      </div>
 
-    <div class="text-center text-xs text-gray-400 mt-4">
-      &copy; 2025 ALL RIGHTS RESERVED
+      <div class="text-center text-xs text-gray-400 mt-4">
+        &copy; 2025 ALL RIGHTS RESERVED
+      </div>
     </div>
   </div>
 </div>
